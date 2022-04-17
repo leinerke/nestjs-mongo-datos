@@ -9,6 +9,9 @@ async function bootstrap() {
     new ValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
     }),
   );
 
@@ -23,4 +26,5 @@ async function bootstrap() {
   app.enableCors();
   await app.listen(process.env.PORT || 3000);
 }
+
 bootstrap();
