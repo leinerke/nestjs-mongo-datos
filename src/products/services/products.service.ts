@@ -23,32 +23,22 @@ export class ProductsService {
     return product;
   }
 
-  // create(data: CreateProductDto) {
-  //   this.counterId = this.counterId + 1;
-  //   const newProduct = {
-  //     id: this.counterId,
-  //     ...data,
-  //   };
-  //   this.products.push(newProduct);
-  //   return newProduct;
-  // }
-  //
-  // update(id: number, changes: UpdateProductDto) {
-  //   const product = this.findOne(id);
-  //   const index = this.products.findIndex((item) => item.id === id);
-  //   this.products[index] = {
-  //     ...product,
-  //     ...changes,
-  //   };
-  //   return this.products[index];
-  // }
-  //
-  // remove(id: number) {
-  //   const index = this.products.findIndex((item) => item.id === id);
-  //   if (index === -1) {
-  //     throw new NotFoundException(`Product #${id} not found`);
-  //   }
-  //   this.products.splice(index, 1);
-  //   return true;
-  // }
+  create(data: CreateProductDto) {
+    const newProduct = new this.productModel(data);
+    return newProduct.save();
+  }
+
+  update(id: string, changes: UpdateProductDto) {
+    const product = this.productModel
+      .findByIdAndUpdate(id, { $set: changes }, { new: true })
+      .exec();
+    if (!product) {
+      throw new NotFoundException(`Product #${id} not found`);
+    }
+    return product;
+  }
+
+  remove(id: string) {
+    return this.productModel.findByIdAndDelete(id);
+  }
 }
